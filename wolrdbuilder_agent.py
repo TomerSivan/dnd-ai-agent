@@ -10,7 +10,7 @@ from schemas import RegionLore, Locations, Factions, NPCs
 load_dotenv()
 llm = ChatOpenAI(model="gpt-4o")
 
-def build_safe_chain(llm, schema, prompt_template_str, input_variables):
+def build_output_fixing_chain(llm, schema, prompt_template_str, input_variables):
     pydantic_parser = PydanticOutputParser(pydantic_object=schema)
 
     prompt = PromptTemplate(
@@ -27,12 +27,12 @@ def build_safe_chain(llm, schema, prompt_template_str, input_variables):
 
 def generate_region_lore(state):
     lore_prompt_str = """
-    You are a worldbuilding AI. Generate detailed LORE for a fantasy region called "{region_name}". 
+You are a worldbuilding AI. Generate detailed LORE for a fantasy region called "{region_name}". 
     
-    Return ONLY valid JSON:
-    {format_instructions}
+Return ONLY valid JSON:
+{format_instructions}
     """
-    chain = build_safe_chain(
+    chain = build_output_fixing_chain(
         llm, RegionLore, lore_prompt_str, input_variables=["region_name"]
     )
     output = chain.invoke({"region_name": state['region_name']})
@@ -42,14 +42,14 @@ def generate_region_lore(state):
 
 def generate_locations(state):
     locations_prompt_str = """
-    You are a worldbuilding AI. Generate 5 major locations for the region "{region_name}" based on this lore:
+You are a worldbuilding AI. Generate 5 major locations for the region "{region_name}" based on this lore:
 
-    LORE: {lore}
+LORE: {lore}
 
-    Return ONLY valid JSON:
-    {format_instructions}
-    """
-    chain = build_safe_chain(
+Return ONLY valid JSON:
+{format_instructions}
+"""
+    chain = build_output_fixing_chain(
         llm, Locations, locations_prompt_str, input_variables=["region_name", "lore"]
     )
     output = chain.invoke({
@@ -62,15 +62,15 @@ def generate_locations(state):
 
 def generate_factions(state):
     factions_prompt_str = """
-    You are a worldbuilding AI. Generate 3 major factions for the region "{region_name}" based on its lore and locations.
+You are a worldbuilding AI. Generate 3 major factions for the region "{region_name}" based on its lore and locations.
 
-    LORE: {lore}
-    LOCATIONS: {locations}
+LORE: {lore}
+LOCATIONS: {locations}
 
-    Return ONLY valid JSON:
-    {format_instructions}
-    """
-    chain = build_safe_chain(
+Return ONLY valid JSON:
+{format_instructions}
+"""
+    chain = build_output_fixing_chain(
         llm, Factions, factions_prompt_str, input_variables=["region_name", "lore", "locations"]
     )
     output = chain.invoke({
@@ -84,16 +84,16 @@ def generate_factions(state):
 
 def generate_npcs(state):
     npcs_prompt_str = """
-    You are a worldbuilding AI. Generate 5 major NPCs for the region "{region_name}" based on its lore, locations, and factions.
+You are a worldbuilding AI. Generate 5 major NPCs for the region "{region_name}" based on its lore, locations, and factions.
 
-    LORE: {lore}
-    LOCATIONS: {locations}
-    FACTIONS: {factions}
+LORE: {lore}
+LOCATIONS: {locations}
+FACTIONS: {factions}
 
-    Return ONLY valid JSON:
-    {format_instructions}
-    """
-    chain = build_safe_chain(
+Return ONLY valid JSON:
+{format_instructions}
+"""
+    chain = build_output_fixing_chain(
         llm, NPCs, npcs_prompt_str, input_variables=["region_name", "lore", "locations", "factions"]
     )
     output = chain.invoke({
