@@ -1,129 +1,112 @@
 import os
 import json
-import re
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph
+from langchain.output_parsers import PydanticOutputParser, OutputFixingParser
+from langchain.prompts import PromptTemplate
+from schemas import RegionLore, Locations, Factions, NPCs
 
 load_dotenv()
-
 llm = ChatOpenAI(model="gpt-4o")
 
-def parse_json_response(response):
-    try:
-        return json.loads(response.content)
-    except json.JSONDecodeError:
-        print("Warning: LLM output not valid JSON! trying to extract JSON from text...")
+def build_safe_chain(llm, schema, prompt_template_str, input_variables):
+    pydantic_parser = PydanticOutputParser(pydantic_object=schema)
 
-        try:
-            json_match = re.search(r'\{.*\}', response.content, re.DOTALL)
-            if json_match:
-                json_str = json_match.group()
-                return json.loads(json_str)
-            else:
-                print("No JSON object found.")
-                return response.content
-        except Exception as e:
-            print(f"Failed to parse JSON fallback: {e}")
-            return response.content
+    prompt = PromptTemplate(
+        template=prompt_template_str,
+        input_variables=input_variables,
+        partial_variables={"format_instructions": pydantic_parser.get_format_instructions()}
+    )
 
-def generate_region_lore(state: dict):
-    prompt = f"""
-    You are a worldbuilding AI. Generate detailed LORE for a fantasy region called "{state['region_name']}". 
-    Return ONLY THE valid json in the following format:
-    {{
-    "region_name": "{state['region_name']}",
-    "lore": "...full lore text here..."
-    }}
+    fixing_parser = OutputFixingParser.from_llm(parser=pydantic_parser, llm=llm)
+
+    chain = prompt | llm | fixing_parser
+    return chain
+
+
+def generate_region_lore(state):
+    lore_prompt_str = """
+    You are a worldbuilding AI. Generate detailed LORE for a fantasy region called "{region_name}". 
+    
+    Return ONLY valid JSON:
+    {format_instructions}
     """
-    response = llm.invoke(prompt)
-    data = parse_json_response(response)
-    state['lore'] = data['lore']
+    chain = build_safe_chain(
+        llm, RegionLore, lore_prompt_str, input_variables=["region_name"]
+    )
+    output = chain.invoke({"region_name": state['region_name']})
+    state['lore'] = output.lore
     return state
 
-def generate_locations(state: dict):
-    prompt = f"""
-    You are a worldbuilding AI. Generate 5 major locations for the region "{state['region_name']}" based on this lore:
 
-    LORE: {state['lore']}
+def generate_locations(state):
+    locations_prompt_str = """
+    You are a worldbuilding AI. Generate 5 major locations for the region "{region_name}" based on this lore:
 
-    Return ONLY THE valid json as:
-    {{
-    "locations": [
-        {{"name": "...", "description": "..."}},
-        {{"name": "...", "description": "..."}},
-        {{"name": "...", "description": "..."}},
-        {{"name": "...", "description": "..."}},
-        {{"name": "...", "description": "..."}}
-    ]
-    }}
+    LORE: {lore}
+
+    Return ONLY valid JSON:
+    {format_instructions}
     """
-    response = llm.invoke(prompt)
-    data = parse_json_response(response)
-    state['locations'] = data['locations']
+    chain = build_safe_chain(
+        llm, Locations, locations_prompt_str, input_variables=["region_name", "lore"]
+    )
+    output = chain.invoke({
+        "region_name": state['region_name'],
+        "lore": state['lore']
+    })
+    state['locations'] = [loc.model_dump() for loc in output.locations]
     return state
 
-def generate_factions(state: dict):
-    prompt = f"""
-    You are a worldbuilding AI. Generate 3 major factions for the region "{state['region_name']}" based on its lore and locations.
 
-    LORE: {state['lore']}
-    LOCATIONS: {state['locations']}
+def generate_factions(state):
+    factions_prompt_str = """
+    You are a worldbuilding AI. Generate 3 major factions for the region "{region_name}" based on its lore and locations.
 
-    Return ONLY THE valid json as:
-    {{
-    "factions": [
-        {{
-        "name": "...",
-        "description": "...",
-        "goals": "...",
-        "conflicts": "..."
-        }},
-        {{
-        "name": "...",
-        "description": "...",
-        "goals": "...",
-        "conflicts": "..."
-        }},
-        {{
-        "name": "...",
-        "description": "...",
-        "goals": "...",
-        "conflicts": "..."
-        }}
-    ]
-    }}
+    LORE: {lore}
+    LOCATIONS: {locations}
+
+    Return ONLY valid JSON:
+    {format_instructions}
     """
-    response = llm.invoke(prompt)
-    data = parse_json_response(response)
-    state['factions'] = data['factions']
+    chain = build_safe_chain(
+        llm, Factions, factions_prompt_str, input_variables=["region_name", "lore", "locations"]
+    )
+    output = chain.invoke({
+        "region_name": state['region_name'],
+        "lore": state['lore'],
+        "locations": json.dumps(state['locations'])
+    })
+    state['factions'] = [f.model_dump() for f in output.factions]
     return state
 
-def generate_npcs(state: dict):
-    prompt = f"""
-    You are a worldbuilding AI. Generate 5 major NPCs for the region "{state['region_name']}" based on its lore, locations, and factions.
 
-    LORE: {state['lore']}
-    LOCATIONS: {state['locations']}
-    FACTIONS: {state['factions']}
+def generate_npcs(state):
+    npcs_prompt_str = """
+    You are a worldbuilding AI. Generate 5 major NPCs for the region "{region_name}" based on its lore, locations, and factions.
 
-    Return ONLY THE valid json as:
-    {{
-    "npcs": [
-        {{"name": "...", "role": "...", "motivation": "..."}},
-        {{"name": "...", "role": "...", "motivation": "..."}},
-        {{"name": "...", "role": "...", "motivation": "..."}},
-        {{"name": "...", "role": "...", "motivation": "..."}},
-        {{"name": "...", "role": "...", "motivation": "..."}}
-    ]
-    }}
+    LORE: {lore}
+    LOCATIONS: {locations}
+    FACTIONS: {factions}
+
+    Return ONLY valid JSON:
+    {format_instructions}
     """
-    response = llm.invoke(prompt)
-    data = parse_json_response(response)
-    state['npcs'] = data['npcs']
+    chain = build_safe_chain(
+        llm, NPCs, npcs_prompt_str, input_variables=["region_name", "lore", "locations", "factions"]
+    )
+    output = chain.invoke({
+        "region_name": state['region_name'],
+        "lore": state['lore'],
+        "locations": json.dumps(state['locations']),
+        "factions": json.dumps(state['factions'])
+    })
+    state['npcs'] = [npc.model_dump() for npc in output.npcs]
     return state
 
-def save_world(state: dict):
+
+def save_world(state):
     world_data = {
         "region": state['region_name'],
         "lore": state['lore'],
@@ -132,6 +115,7 @@ def save_world(state: dict):
         "npcs": state['npcs']
     }
 
+    os.makedirs("worlds", exist_ok=True)
     filename = f"worlds/{state['region_name'].replace(' ', '_').lower()}_world.json"
 
     with open(filename, "w", encoding="utf-8") as f:
@@ -141,6 +125,7 @@ def save_world(state: dict):
     return state
 
 
+# BUILD THE LANGGRAPH PIPELINE
 graph = StateGraph(dict)
 
 graph.add_node("lore", generate_region_lore)
