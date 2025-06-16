@@ -132,7 +132,7 @@ def save_world(state: dict):
         "npcs": state['npcs']
     }
 
-    filename = f"{state['region_name'].replace(' ', '_').lower()}_world.json"
+    filename = f"worlds/{state['region_name'].replace(' ', '_').lower()}_world.json"
 
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(world_data, f, indent=4, ensure_ascii=False)
