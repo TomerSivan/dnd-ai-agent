@@ -65,7 +65,7 @@ class WorldPersistence:
             if os.path.isdir(os.path.join(WorldPersistence.WORLDS_FOLDER, name))
         ]
 
-    def delete_world(world_name:str):
+    def delete_world_by_name(world_name:str):
         world_path = os.path.join(WorldPersistence.WORLDS_FOLDER, world_name)
         if os.path.exists(world_path):
             shutil.rmtree(world_path)

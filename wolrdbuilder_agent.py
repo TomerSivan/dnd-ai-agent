@@ -128,23 +128,32 @@ graph.add_edge("npcs", "save")
 agent = graph.compile()
 
 if __name__ == "__main__":
-    print("Worldbuilder Menu:")
-    print("[1] Create new world")
-    print("[2] List existing worlds")
-    print("[3] Load existing world")
-    choice = input("Enter choice: ")
+    while True:
+        print("Worldbuilder Menu:")
+        print("[1] Create new world")
+        print("[2] List existing worlds")
+        print("[3] Load existing world")
+        print("[4] Exit")
+        choice = input("Enter choice: ")
 
-    if choice == "1":
-        user_region = input("Enter region name: ")
-        state = {"region_name": user_region}
-        final_state = agent.invoke(state)
-        print("New world created!")
+        if choice == "1":
+            user_region = input("Enter region name: ")
+            state = {"region_name": user_region}
+            final_state = agent.invoke(state)
+            print("New world created!")
 
-    elif choice == "2":
-        worlds = WorldPersistence.list_worlds()
-        print("List of worlds:", worlds)
+        elif choice == "2":
+            worlds = WorldPersistence.list_worlds()
+            print("List of worlds:", worlds)
 
-    elif choice == "3":
-        world_name = input("Enter world name to load:")
-        state = WorldPersistence.load_world(world_name)
-        print(json.dumps(state, indent=4, ensure_ascii=False))
+        elif choice == "3":
+            world_name = input("Enter world name to load:")
+            state = WorldPersistence.load_world(world_name)
+            print(f"\n Loaded world '{state['region_name']}' successfully!")
+
+        elif choice == "4":
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid choice! Try again.")
