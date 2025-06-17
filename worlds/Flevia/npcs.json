@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Eleri Wynter",
+        "role": "Eldorian Seeker",
+        "motivation": "Eager to unlock the secrets of the Eldoria and use their mystical insights to enhance the magical potential of Flevia, particularly interested in reviving ancient healing arts."
+    },
+    {
+        "name": "Thalion Mossfoot",
+        "role": "Warden of the Forest",
+        "motivation": "Driven to protect the Whispering Woods from exploitation, focusing on maintaining the harmony between the natural and magical elements of the land."
+    },
+    {
+        "name": "Sir Gareth Skybound",
+        "role": "Griffon Knight Captain",
+        "motivation": "Committed to ensuring the safety of Flevia from external threats while seeking to unify its people under a banner of peace and justice."
+    },
+    {
+        "name": "Lady Seraphine Stoneweaver",
+        "role": "Council of Vellum Member",
+        "motivation": "Aiming to bridge cultural gaps between the races of Flevia, promoting unity through shared traditions and innovations from recovered Eldorian knowledge."
+    },
+    {
+        "name": "Brigg Ironfoot",
+        "role": "Treasure Hunter Leader",
+        "motivation": "Intends to profit from the relics of the Eldoria while navigating tension with the Seekers, believing their discoveries could revolutionize industry and commerce."
+    }
+]

@@ -147,7 +147,7 @@ if __name__ == "__main__":
             print("List of worlds:", worlds)
 
         elif choice == "3":
-            world_name = input("Enter world name to load:")
+            world_name = input("Enter world name to load: ")
             state = WorldPersistence.load_world(world_name)
             print(f"\n Loaded world '{state['region_name']}' successfully!")
 

@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Elara Luminas",
+        "role": "High Priestess of the Elderglow Council",
+        "motivation": "To safeguard the celestial artifacts and ensure the harmonious flow of magic across Gokia by maintaining the ancient celestial rites."
+    },
+    {
+        "name": "Thalos Veilenshade",
+        "role": "Leader of the Veilen Alliance",
+        "motivation": "To unify the Veilen tribes against the Harbingers of Ash and deepen their connection to Gokia through the exploration of ancient runes."
+    },
+    {
+        "name": "Zarok Emberclaw",
+        "role": "Commander of the Harbingers of Ash",
+        "motivation": "To seize the celestial artifacts and harness Gokia’s magic in order to establish a new order under his dark dominion."
+    },
+    {
+        "name": "Mira Whisperwind",
+        "role": "Guide of the Whispering Glade",
+        "motivation": "To foster unity and peace among Gokia's tribes by promoting dialogue and shared stories in the neutral ground of the Whispering Glade."
+    },
+    {
+        "name": "Orin Riverheart",
+        "role": "Guardian of the River of Memories",
+        "motivation": "To protect the River of Memories and its flow of knowledge, ensuring that the wisdom of the past remains accessible to those who seek it with pure intentions."
+    }
+]
