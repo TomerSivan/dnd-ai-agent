@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Whispering Mountains",
+        "description": "Towering peaks that pierce the sky, shrouded in perpetual mist. These mountains are home to elder druids who commune with ancient spirits. The air is filled with whispers of forgotten secrets carried by the wind."
+    },
+    {
+        "name": "Elkwood Forest",
+        "description": "A vast expanse of old-growth trees where the legendary white elk roam freely. The forest is alive with magic, and those who wander its paths may encounter luminous sylphs dancing under the moonlight."
+    },
+    {
+        "name": "River of Tranquility",
+        "description": "A crystal-clear river known for its healing properties, it meanders through the heart of Svenlia. It is said that the water holds the essence of life itself, nurturing both the land and the spirits within."
+    },
+    {
+        "name": "Stone Circle of Elders",
+        "description": "An ancient site revered by the druids, featuring a circle of runestones etched with symbols from a forgotten language. It is a place of great power, where the magic of Svenlia is concentrated and the past whispers to those who listen."
+    },
+    {
+        "name": "Emerald Plains",
+        "description": "Lush, rolling fields blanketed in vibrant greenery. The plains are a haven for wildlife and a battleground for those who seek to protect Svenlia from external threats. The druids often gather here to harness the power of nature in their rituals."
+    }
+]

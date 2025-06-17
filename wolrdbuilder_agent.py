@@ -6,6 +6,7 @@ from langgraph.graph import StateGraph
 from langchain.output_parsers import PydanticOutputParser, OutputFixingParser
 from langchain.prompts import PromptTemplate
 from schemas import RegionLore, Locations, Factions, NPCs
+from world_manager import WorldPersistence
 
 load_dotenv()
 llm = ChatOpenAI(model="gpt-4o")
@@ -107,27 +108,11 @@ Return ONLY valid JSON:
 
 
 def save_world(state):
-    world_data = {
-        "region": state['region_name'],
-        "lore": state['lore'],
-        "locations": state['locations'],
-        "factions": state['factions'],
-        "npcs": state['npcs']
-    }
-
-    os.makedirs("worlds", exist_ok=True)
-    filename = f"worlds/{state['region_name'].replace(' ', '_').lower()}_world.json"
-
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(world_data, f, indent=4, ensure_ascii=False)
-
-    print(f"World saved to: {filename}")
+    WorldPersistence.save_world(state)
     return state
 
 
-# BUILD THE LANGGRAPH PIPELINE
 graph = StateGraph(dict)
-
 graph.add_node("lore", generate_region_lore)
 graph.add_node("locations", generate_locations)
 graph.add_node("factions", generate_factions)
@@ -143,9 +128,23 @@ graph.add_edge("npcs", "save")
 agent = graph.compile()
 
 if __name__ == "__main__":
-    user_region = input("Enter region name to build: ")
-    state = {"region_name": user_region}
-    final_state = agent.invoke(state)
+    print("Worldbuilder Menu:")
+    print("[1] Create new world")
+    print("[2] List existing worlds")
+    print("[3] Load existing world")
+    choice = input("Enter choice: ")
 
-    print("Worldbuilding Complete!")
-    print(json.dumps(final_state, indent=4, ensure_ascii=False))
+    if choice == "1":
+        user_region = input("Enter region name: ")
+        state = {"region_name": user_region}
+        final_state = agent.invoke(state)
+        print("New world created!")
+
+    elif choice == "2":
+        worlds = WorldPersistence.list_worlds()
+        print("List of worlds:", worlds)
+
+    elif choice == "3":
+        world_name = input("Enter world name to load:")
+        state = WorldPersistence.load_world(world_name)
+        print(json.dumps(state, indent=4, ensure_ascii=False))
