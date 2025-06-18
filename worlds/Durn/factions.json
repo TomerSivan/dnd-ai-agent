@@ -1,0 +1,20 @@
+[
+    {
+        "name": "The Faenan Council",
+        "description": "A powerful assembly of the elusive Faenan, ethereal beings who serve as the guardians of the Gloomwood. They are deeply tied to the ancient magic of the forest and communicate with nature on a profound level.",
+        "goals": "To protect the Gloomwood and maintain the balance of magical energies within Durn. They seek to preserve the ancient knowledge contained within the forest and prevent any misuse of its resources.",
+        "conflicts": "The Faenan Council often finds itself at odds with those who wish to exploit the Gloomwood for personal gain, such as treasure hunters and unscrupulous adventurers. They are also wary of other factions that may unknowingly disrupt the delicate balance of magic in the region."
+    },
+    {
+        "name": "The Starwatch Alliance",
+        "description": "A collective of scholars and seers dedicated to studying the celestial patterns visible from Starwatch Peak. They believe the stars hold the key to understanding the mysteries of the universe and the will of the gods.",
+        "goals": "To interpret the will of the gods through the patterns of the stars and use the knowledge gained to guide the people of Durn. They also aim to protect Starwatch Peak as a sacred site of astronomical significance.",
+        "conflicts": "The Starwatch Alliance often clashes with rival scholars who challenge their interpretations or seek to exploit their findings for political power. They also struggle against forces that threaten the sanctity of Starwatch Peak, such as rival factions who might desecrate the observatory for control."
+    },
+    {
+        "name": "The Seekers of the Mirror",
+        "description": "A clandestine group dedicated to uncovering the secrets of the Celestial Mirror Cavern. They are composed of adventurers, mystics, and scholars from various lands, united by their obsession with unlocking the visions promised by the Celestial Mirror.",
+        "goals": "To gain access to the Celestial Mirror and harness its power to foresee events of great consequence for themselves and the world. They seek to prove their worthiness to the artifact and reveal its secrets.",
+        "conflicts": "The Seekers are often in conflict with the native guardians of Durn, who view their relentless pursuit as a threat to the natural order. They also compete internally, as members have differing agendas and visions of how the power of the Celestial Mirror should be used."
+    }
+]

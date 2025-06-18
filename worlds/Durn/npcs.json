@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Eldara Whisperleaf",
+        "role": "Seer of the Council of Elders",
+        "motivation": "To interpret the will of the gods through the stars and protect Durn from external threats by sharing her visions with the Council."
+    },
+    {
+        "name": "Lirael Starfire",
+        "role": "Leader of the Starwatch Alliance",
+        "motivation": "To ensure the sanctity and accuracy of celestial observations at Starwatch Peak, uncovering the mysteries of the universe."
+    },
+    {
+        "name": "Thorne Silverbark",
+        "role": "Voice of the Faenan Council",
+        "motivation": "To maintain the balance of magical energies in Durn and safeguard the Gloomwood from exploitation and harm by outsiders."
+    },
+    {
+        "name": "Kaelan the Seeker",
+        "role": "Founder of the Seekers of the Mirror",
+        "motivation": "To unlock the secrets of the Celestial Mirror and gain foresight into events that could alter the fate of Durn and beyond."
+    },
+    {
+        "name": "Sylvia Moondancer",
+        "role": "Mystic Guide of the Whispering Glade",
+        "motivation": "To offer wisdom and clarity to those who visit the Whispering Glade, bridging the understanding between mortal and magical realms."
+    }
+]

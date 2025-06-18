@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph
 from langchain.output_parsers import PydanticOutputParser, OutputFixingParser
 from langchain.prompts import PromptTemplate
 from schemas import RegionLore, Locations, Factions, NPCs
-from world_manager import WorldPersistence
+from world_storage import WorldStorage
 
 load_dotenv()
 llm = ChatOpenAI(model="gpt-4o")
@@ -108,7 +108,7 @@ Return ONLY valid JSON:
 
 
 def save_world(state):
-    WorldPersistence.save_world(state)
+    WorldStorage.save_world(state)
     return state
 
 
@@ -143,12 +143,12 @@ if __name__ == "__main__":
             print("New world created!")
 
         elif choice == "2":
-            worlds = WorldPersistence.list_worlds()
+            worlds = WorldStorage.list_worlds()
             print("List of worlds:", worlds)
 
         elif choice == "3":
             world_name = input("Enter world name to load: ")
-            state = WorldPersistence.load_world(world_name)
+            state = WorldStorage.load_world(world_name)
             print(f"\n Loaded world '{state['region_name']}' successfully!")
 
         elif choice == "4":

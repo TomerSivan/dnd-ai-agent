@@ -3,14 +3,14 @@ import json
 from typing import List
 import shutil
 
-class WorldPersistence:
+class WorldStorage:
 
     WORLDS_FOLDER = "worlds"
 
     @staticmethod
     def save_world(state:dict):
         world_name = state['region_name']
-        world_path = os.path.join(WorldPersistence.WORLDS_FOLDER, world_name)
+        world_path = os.path.join(WorldStorage.WORLDS_FOLDER, world_name)
         os.makedirs(world_path, exist_ok=True)
 
         with open(os.path.join(world_path, "metadata.json"), "w", encoding="utf-8") as f:
@@ -32,7 +32,7 @@ class WorldPersistence:
 
     @staticmethod
     def load_world(world_name:str) -> dict:
-        world_path = os.path.join(WorldPersistence.WORLDS_FOLDER, world_name)
+        world_path = os.path.join(WorldStorage.WORLDS_FOLDER, world_name)
         if not os.path.exists(world_path):
             raise FileNotFoundError(f"World '{world_name}' not found.")
 
@@ -58,15 +58,15 @@ class WorldPersistence:
 
     @staticmethod
     def list_worlds() -> List[str]:
-        if not os.path.exists(WorldPersistence.WORLDS_FOLDER):
+        if not os.path.exists(WorldStorage.WORLDS_FOLDER):
             return []
         return [
-            name for name in os.listdir(WorldPersistence.WORLDS_FOLDER)
-            if os.path.isdir(os.path.join(WorldPersistence.WORLDS_FOLDER, name))
+            name for name in os.listdir(WorldStorage.WORLDS_FOLDER)
+            if os.path.isdir(os.path.join(WorldStorage.WORLDS_FOLDER, name))
         ]
 
     def delete_world_by_name(world_name:str):
-        world_path = os.path.join(WorldPersistence.WORLDS_FOLDER, world_name)
+        world_path = os.path.join(WorldStorage.WORLDS_FOLDER, world_name)
         if os.path.exists(world_path):
             shutil.rmtree(world_path)
             print(f"World '{world_name}' deleted.")
